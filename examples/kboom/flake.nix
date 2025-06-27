@@ -21,5 +21,23 @@
                   rubyPackages.rspec
                 ];
         };
+        packages = with pkgs; {
+            kboom = stdenv.mkDerivation {
+                pname = "kboom";
+                version = "0.1.0";
+                src = ./.;
+
+                buildInputs = [ gmp ];
+                nativeBuildInputs = [ gcc gnumake ];
+
+                buildPhase = ''
+                    make
+                '';
+                installPhase = ''
+                    mkdir -p $out/bin
+                    cp main.out $out/bin/kboom
+                '';
+            };
+        };
     });
 }
