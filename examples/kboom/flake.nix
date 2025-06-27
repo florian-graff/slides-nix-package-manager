@@ -39,6 +39,24 @@
                     cp main.out $out/bin/kboom
                   '';
             };
+
+            test = pkgs.writeShellApplication {
+                name = "kboom-tests";
+
+                runtimeInputs = with pkgs; let
+                    rubyWithRSpec = pkgs.ruby.withPackages (ps: [ps.rspec]);
+                in [
+                gcc
+                gnumake
+                gmp
+                rubyWithRSpec
+                ];
+            text = ''
+                set -euo pipefail
+                echo "🧪 Executing RSpec …"
+                BIN=${kboom}/bin/kboom rspec --format documentation ./*.rb
+            '';
+            };
         };
     });
 }
